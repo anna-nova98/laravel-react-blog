@@ -1,15 +1,17 @@
-# Use official Node.js image
+# Use Node.js Alpine
 FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package*.json ./
+# Copy package files and install dependencies
+COPY frontend/package*.json ./
 RUN npm install
 
-# Copy application source code
-COPY . .
+# Copy application code
+COPY frontend/ ./
 
-# Start development server
-CMD ["npm", "run", "dev"]
+# Expose port for Vite
+EXPOSE 3000
+
+# Run development server
+CMD ["npm", "run", "dev", "--", "--host"]

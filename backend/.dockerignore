@@ -1,0 +1,16 @@
+# Ignore node_modules
+node_modules
+npm-debug.log
+
+# Ignore vendor folder (composer installs here)
+vendor
+
+# Ignore environment file
+.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Dockerfile / docker-compose logs
+docker-compose.override.yml

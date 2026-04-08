@@ -1,37 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
-export default function CommentForm({ articleId }) {
-  const [authorName, setAuthorName] = useState('');
-  const [content, setContent] = useState('');
+export default function CommentForm({ articleId, setComments }) {
+  const [author, setAuthor] = useState("");
+  const [content, setContent] = useState("");
 
-  const handleSubmit = async (e) => {
+  const submit = (e) => {
     e.preventDefault();
-    await fetch(`http://localhost:8000/api/articles/${articleId}/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ author_name: authorName, content }),
-    });
-    setAuthorName('');
-    setContent('');
-    window.location.reload(); // simple reload for demo
+    if (!author.trim() || !content.trim()) return;
+    axios.post(`http://localhost:8000/api/articles/${articleId}/comments`, {
+      author_name: author, content,
+    }).then(res => {
+      setComments(prev => [...prev, res.data]);
+      setAuthor(""); setContent("");
+    }).catch(err => console.error(err));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Your name"
-        value={authorName}
-        onChange={(e) => setAuthorName(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Your comment"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        required
-      ></textarea>
-      <button type="submit">Add Comment</button>
+    <form onSubmit={submit}>
+      <div className="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Your name" value={author} onChange={e => setAuthor(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label>Comment</label>
+        <textarea placeholder="Share your thoughts…" value={content} onChange={e => setContent(e.target.value)} />
+      </div>
+      <button type="submit" className="btn btn-primary">Post Comment</button>
     </form>
   );
 }

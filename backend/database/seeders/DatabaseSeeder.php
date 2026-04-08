@@ -17,21 +17,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a test user
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create a test user (skip if already exists)
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            ['name' => 'Test User', 'password' => bcrypt('password')]
+        );
 
-        // Seed articles
-        Article::factory()->count(5)->create();
+        // Seed articles only if none exist
+        if (Article::count() === 0) {
+            Article::factory()->count(5)->create();
 
-        // Seed comments for each article
-        $articles = Article::all();
-        foreach ($articles as $article) {
-            Comment::factory()->count(3)->create([
-                'article_id' => $article->id, // Associate comments with the article
-            ]);
+            $articles = Article::all();
+            foreach ($articles as $article) {
+                Comment::factory()->count(3)->create([
+                    'article_id' => $article->id,
+                ]);
+            }
         }
     }
 }

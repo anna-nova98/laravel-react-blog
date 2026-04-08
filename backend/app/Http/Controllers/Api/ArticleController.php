@@ -47,6 +47,20 @@ class ArticleController extends Controller
     }
 
     /**
+     * List comments for an article
+     */
+    public function getComments($id)
+    {
+        $article = Article::find($id);
+
+        if (!$article) {
+            return response()->json(['message' => 'Article not found'], 404);
+        }
+
+        return response()->json($article->comments, 200);
+    }
+
+    /**
      * Add a comment to an article
      */
     public function addComment(Request $request, $id)
