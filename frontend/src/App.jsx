@@ -14,7 +14,6 @@ export default function App() {
   );
 }
 
-// Wrapper to extract route params
 import { useParams } from 'react-router-dom';
 function ArticleDetailWrapper() {
   const { id } = useParams();
