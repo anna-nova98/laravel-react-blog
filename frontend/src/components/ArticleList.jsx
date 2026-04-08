@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import NewArticleForm from './NewArticleForm';
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -13,6 +14,7 @@ export default function ArticleList() {
   return (
     <div>
       <h1>Articles</h1>
+      <NewArticleForm />
       <ul>
         {articles.map(article => (
           <li key={article.id}>
