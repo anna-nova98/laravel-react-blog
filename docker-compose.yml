@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    container_name: blog-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_CONNECTION=mysql
+      DB_HOST=db
+      DB_PORT=3306
+      DB_DATABASE=blog
+      DB_USERNAME=root
+      DB_PASSWORD=root
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  frontend:
+    build: ./frontend
+    container_name: blog-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+
+  db:
+    image: mysql:8.0
+    container_name: blog-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: blog
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
