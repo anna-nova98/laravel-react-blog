@@ -11,5 +11,6 @@ php artisan config:clear
 php artisan migrate --force
 php artisan db:seed --force
 
-echo "Starting server..."
-exec php artisan serve --host=0.0.0.0 --port=8000
+echo "Starting php-fpm and nginx..."
+php-fpm -D
+nginx -g "daemon off;"

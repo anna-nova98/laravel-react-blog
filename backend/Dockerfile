@@ -11,9 +11,9 @@ FROM php:8.3-fpm
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies + Nginx
 RUN apt-get update && apt-get install -y \
-    git unzip libonig-dev libzip-dev zip \
+    git unzip libonig-dev libzip-dev zip nginx \
     && docker-php-ext-install pdo_mysql mbstring zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -34,11 +34,13 @@ COPY --from=vendor /app/vendor ./vendor
 # Clear cached package discovery (regenerate without dev deps)
 RUN rm -f bootstrap/cache/packages.php && php artisan package:discover --ansi
 
+# Copy Nginx config
+COPY backend/nginx.conf /etc/nginx/sites-available/default
+
 # Make entrypoint executable
 RUN chmod +x entrypoint.sh
 
 # Expose port
 EXPOSE 8000
 
-# Run Laravel development server
 CMD ["sh", "entrypoint.sh"]

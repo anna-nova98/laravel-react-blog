@@ -99,6 +99,30 @@ docker compose up --build -d
 
 ---
 
+## Migrations & Seeds
+
+Migrations and seeds run **automatically** on every startup via the entrypoint script. If you need to run them manually:
+
+**Run migrations:**
+
+```bash
+docker exec blog-backend php artisan migrate
+```
+
+**Run seeds:**
+
+```bash
+docker exec blog-backend php artisan db:seed
+```
+
+**Fresh migration + seed (wipes all data):**
+
+```bash
+docker exec blog-backend php artisan migrate:fresh --seed
+```
+
+---
+
 ## Troubleshooting
 
 **Port already in use**
